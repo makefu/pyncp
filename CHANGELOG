@@ -1,2 +1,3 @@
+05.02.2009 Replaced closefds() with exit(0) to avoid abrupt socket/file closing when transmitting
 03.02.2009 Added Broadcast to the "push" function
 01.02.2009 Added "push" and "poll" functionality with Multicasting

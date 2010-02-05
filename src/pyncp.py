@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 from socket import * #@UnusedWildImport
 import tarfile
 import select
 import struct
 import sys #@Reimport
 import os.path
+import os
 ''' VARIABLES TO MODIFY '''
 
 # to be compatible with the original npush/npoll you will need to send the tar-file without compression
@@ -138,7 +140,11 @@ class pyncpPusher:
             t.add(f)
         print "finished"
         t.close()
-        closeFds((sockfile,sock))
+
+        exit(0)
+        # sometimes closefds breaks the last bit of the connection, 
+        # so we just "exit(0)" to avoid this
+        #closeFds((sockfile,sock))
 
         
         
@@ -155,7 +161,7 @@ class pyncpPusher:
             v4bcsock = self.bindBroadcastSock()
             
         if not v4mcsock and not v4bcsock:
-            print "cannot continue without at least one announcement message!"
+            print "cannot continue without at least one announcement socket!"
             exit(1)
             
         v4datasock = bindTCP()
@@ -183,7 +189,8 @@ class pyncpPusher:
                     (sock,address) = v4datasock.accept()
                     sock.settimeout(1)
                     try:
-                        print "Got connection from %s:%d, receiving %s"%address,sock.recv(1024)
+                        print "Got connection from %s:%d"%address
+                        print "client answer: %s"%sock.recv(1024)
                     except :
                         pass
         
@@ -204,7 +211,8 @@ class pyncpPusher:
         # IMPORTANT: close tar file after finished writing
         # otherwise the stream would be empty ...
         t.close()
-        closeFds((sockfile,sock))
+        exit(0)
+        #closeFds((sockfile,sock))
     
     def bindMulticastSock(self):
         host = ''
@@ -280,7 +288,8 @@ class pyncpListener:
         print "finished"
         # we want the tarfile to close before all other sockets
         t.close() 
-        closeFds((sockfile,sock,l))
+        exit(0)
+        #closeFds((sockfile,sock,l))
 
         
     def poll(self):
@@ -292,7 +301,8 @@ class pyncpListener:
                 
                 (data,addr) = v4mcsock.recvfrom(1024)
                 if ( addr[1] == PYNCPPORT):
-                    print "found pusher at %s:%d"%addr, "Anouncement :",data
+                    print "found pusher at %s:%d"%addr
+                    print "Anouncement :",data
                     break
                 else:
                     print "received garbage from %s:%d"%addr
@@ -315,7 +325,8 @@ class pyncpListener:
         print "finished"
         t.close()
         
-        closeFds((sockfile,sock))
+        exit(0)
+        #closeFds((sockfile,sock))
         
     
     def joinMulticast(self):
