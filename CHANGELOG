@@ -1,3 +1,10 @@
-05.02.2009 Replaced closefds() with exit(0) to avoid abrupt socket/file closing when transmitting
-03.02.2009 Added Broadcast to the "push" function
-01.02.2009 Added "push" and "poll" functionality with Multicasting
+08.02.2010 Added GUI to pyncp, now pyncp_vis
+           The source code is more like a playground but working pretty well
+           Added ability to extract into folder ( to avoid trailing ../.. , see WARNING in official
+           API. 
+           Added threading to be able to spawn multiple instances ( not sure yet why but hey)
+           Even with the GUI, nobody can stand the power of the command line!
+           replaced the exit(0) with a graceful socket close ( wait for 1 second, close then)
+05.02.2010 Replaced closefds() with exit(0) to avoid abrupt socket/file closing when transmitting
+03.02.2010 Added Broadcast to the "push" function
+01.02.2010 Added "push" and "poll" functionality with Multicasting

@@ -1,0 +1,24 @@
+Pyncp / Python Network Copy
+
+This project is intended to be a python port/rewrite 
+of "ncp - a fast file copy tool for LANs" 
+written by Felix von Leitner <felix-ncp@fefe.de>
+
+This project is intended to be compatible to the 
+original ncp implementation. The current 
+implementation is actually 100% compatible with
+the original implementation!
+Currently pyncp has a global variable to switch
+between compressed and uncompressed transmissions
+as ncp uses uncompressed packaging in the sources.
+If you want to change this by yourself, in the sources
+there are execv() calls with tar piping to stdout.
+add a -z flag there and ncp will send compressed
+data streams.
+
+08.02.2010 - pyncp received a shiny makeover
+This surely never was intended for this project
+but as i was bored enough to play around with
+TKinter and python, pyncp now has a clickable
+GUI.
+Still the shell is mightier than the blade.
