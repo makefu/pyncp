@@ -14,7 +14,7 @@ import time
 # add -z in the npush/npoll sources to achieve this or use a pipe
 
 #change this if you want more performance
-wantCompress = False
+wantCompress = True
 
 
 TARWRITE='w|'
@@ -22,7 +22,7 @@ TARWRITE='w|'
 TARREAD= 'r|'
 
 doWantBroadcast = True
-wantFull=True
+wantFull=False
 ''' END VARIABLES TO MODIFY '''
 
 
