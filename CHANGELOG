@@ -1,3 +1,6 @@
+18.03.2010 added stripping to the sending peer as well
+           This is still a bit messy, but it seems to be working.
+           To be tested
 08.02.2010 Added GUI to pyncp, now pyncp_vis
            The source code is more like a playground but working pretty well
            Added ability to extract into folder ( to avoid trailing ../.. , see WARNING in official

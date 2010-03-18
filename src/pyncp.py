@@ -5,6 +5,7 @@ import select
 import struct
 import sys #@Reimport
 import os.path #@Reimport
+import os
 import time 
 ''' VARIABLES TO MODIFY '''
 
@@ -167,16 +168,28 @@ class pyncpPusher:
         t = tarfile.open('',TARWRITE,sockfile)
         print "[#] start writing files"
         f = 0
+        if not wantFull:
+            curr = os.getcwd()
         try:
             for f in files:
+                ## we rewrite the filename by stripping the path from the actual file name
+                ## if we do not want full pathNames to be submitted
+                if not wantFull:
+                    filePath,f = os.path.split(f)
+                    if filePath == "":
+                        filePath = '.'
+                    os.chdir(filePath)
                 print "[*] adding:",f
+                
                 t.add(f)
+                if not wantFull:
+                    os.chdir(curr)
             print "[#] finished"
         except:
             print "[!] failed while trying to add",f
-            
+        if not wantFull:
+            os.chdir(curr)
         t.close()
-
        
         # sometimes closefds breaks the last bit of the connection, 
         # so we just "exit(0)" to avoid this
@@ -240,9 +253,27 @@ class pyncpPusher:
         t = tarfile.open('',TARWRITE,sockfile)
         tarfile.TarInfo.path
         print "[*] start writing files"
-        for f in files:
-            print "[*] adding:",f
-            t.add(f)
+        if not wantFull:
+            curr = os.getcwd()
+        try:
+            for f in files:
+                #strip filename from path if we do not want to send files with their full file name
+                if not wantFull:
+                    filePath,f = os.path.split(f)
+                    #strip and save again
+                    if filePath == "":
+                        filePath = '.'
+                    os.chdir(filePath)
+
+                print "[*] adding:",f
+                t.add(f)
+                if not wantFull:
+                    os.chdir(curr)
+        except:
+            print "[!] failed while trying to add",f
+        
+        if not wantFull:
+            os.chdir(curr)
             
         print "[*] finished"
         
