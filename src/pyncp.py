@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from socket import * #@UnusedWildImport
+import socket
 import tarfile
 import select
 import struct
@@ -92,11 +92,11 @@ def main(args):
 
 def bindTCP():
     host = ''
-    v4datasock = socket(AF_INET,SOCK_STREAM)
+    v4datasock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-    v4datasock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+    v4datasock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     if hasattr(socket,"SO_REUSEPORT"):
-        v4datasock.setsockopt(SOL_SOCKET,socket.SO_REUSEPORT,1)
+        v4datasock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
     
     v4datasock.bind((host,PYNCPPORT))
     v4datasock.listen(1)    
@@ -160,7 +160,7 @@ class pyncpPusher:
         '''
         print "[*] copying",files,"to ip :",ip
         try:
-            sock = create_connection((ip,PYNCPPORT))
+            sock = socket.create_connection((ip,PYNCPPORT))
         except:
             print "[!] cannot create connection to host, bailing out"
             return
@@ -286,24 +286,26 @@ class pyncpPusher:
     def bindMulticastSock(self):
         host = ''
         # ipv4 multicast udp stuff
-        v4mcsock = socket(AF_INET,SOCK_DGRAM,  IPPROTO_UDP)
-        v4mcsock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        v4mcsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,  socket.IPPROTO_UDP)
+        v4mcsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        v4mcsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
         if hasattr(socket,"SO_REUSEPORT"):
-            v4mcsock.setsockopt(SOL_SOCKET,socket.SO_REUSEPORT,1)
+            v4mcsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
         
-        v4mcsock.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, 32)
+        v4mcsock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
     
         v4mcsock.bind((host,PYNCPPORT))
-        v4mcsock.setsockopt(IPPROTO_IP,IP_MULTICAST_LOOP,1)
+        v4mcsock.setsockopt(socket.IPPROTO_IP,socket.IP_MULTICAST_LOOP,1)
         return v4mcsock
     
     def bindBroadcastSock(self):
         host=''
-        v4bcsock = socket(AF_INET,SOCK_DGRAM)
-        v4bcsock.setsockopt(SOL_SOCKET,SO_BROADCAST,1)
-        v4bcsock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        v4bcsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        v4bcsock.setsockopt(socket.SOL_SOCKET,socket.SO_BROADCAST,1)
+        v4bcsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        v4bcsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
         if hasattr(socket,"SO_REUSEPORT"):
-            v4bcsock.setsockopt(SOL_SOCKET,socket.SO_REUSEPORT,1)
+            v4bcsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)
         v4bcsock.bind((host,PYNCPPORT))
         return v4bcsock
         
@@ -387,7 +389,7 @@ class pyncpListener:
                 print "exception",e
         
         v4mcsock.close()
-        sock = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP)
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM,socket.IPPROTO_TCP)
         
         sock.connect(addr)
         sock.send("I am ready!")
@@ -419,20 +421,20 @@ class pyncpListener:
         '''
         This socket will also be able to receive broadcast!
         '''
-        v4mcsock = socket(AF_INET,SOCK_DGRAM,  IPPROTO_UDP)
+        v4mcsock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,socket.IPPROTO_UDP)
         
-        v4mcsock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        v4mcsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         if hasattr(socket,"SO_REUSEPORT"):
             print "got SO_REUSEPORT"
-            v4mcsock.setsockopt(SOL_SOCKET,socket.SO_REUSEPORT,1)    
+            v4mcsock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEPORT,1)    
     
-        v4mcsock.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, 32) 
-        v4mcsock.setsockopt(IPPROTO_IP, IP_MULTICAST_LOOP, 1)
+        v4mcsock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32) 
+        v4mcsock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
 
         v4mcsock.bind(('', PYNCPPORT))
         print "[#] Joining Multicast group"
-        mreq = struct.pack("4sl", inet_aton(IPV4GROUP), INADDR_ANY)
-        v4mcsock.setsockopt(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq)
+        mreq = struct.pack("4sl", socket.inet_aton(IPV4GROUP), socket.INADDR_ANY)
+        v4mcsock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
         return v4mcsock
 
 if __name__ == '__main__':
