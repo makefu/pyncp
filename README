@@ -1,4 +1,7 @@
 Pyncp / Python Network Copy
+===========================
+
+Copyright Felix Richter (github-pyncp@syntax-fehler.de)
 
 This project is intended to be a python port/rewrite 
 of "ncp - a fast file copy tool for LANs" 
@@ -22,3 +25,10 @@ but as i was bored enough to play around with
 TKinter and python, pyncp now has a clickable
 GUI.
 Still the shell is mightier than the blade.
+
+
+License
+=======
+This project is licensed under the WTFPLv2 
+(see COPYING). 
+
