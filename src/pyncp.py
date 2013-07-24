@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from socket import * #@UnusedWildImport
+from socket import socket,AF_INET,SOCK_STREAM,SOL_SOCKET,SO_REUSEADDR,\
+    create_connection,IPPROTO_UDP,IP_MULTICAST_LOOP,SO_BROADCAST 
 import tarfile
 import select
 import struct
@@ -130,7 +131,6 @@ def version():
     print  PROGRAMNAME,"(simple Client/Server) Version",VERSIONSTRING
 def help():
     version()
-    print ""
     print "Usage:"
     print "      pyncp                    -- runs in listener mode, waits for connection"
     print "      pyncp [ip] [files]+      -- sends files to ip where pyncp should run in listener mode ( no args )"
